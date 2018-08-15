@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="latin1" collation="latin1_swedish_ci">travelsathi</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="admins" view="colnames">
+<left>12</left>
+<top>51</top>
+<width>100</width>
+<height>146</height>
+<sql_create_table>CREATE TABLE `admins` (
+  `adminid` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  `email` varchar(20) DEFAULT NULL,
+  `password` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`adminid`)
+) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="booking" view="colnames">
+<left>328</left>
+<top>318</top>
+<width>127</width>
+<height>214</height>
+<sql_create_table>CREATE TABLE `booking` (
+  `bookingid` int(10) NOT NULL AUTO_INCREMENT,
+  `tourid` int(10) DEFAULT NULL,
+  `dateofbooking` datetime DEFAULT NULL,
+  `customerid` int(10) DEFAULT NULL,
+  `noofseats` int(10) DEFAULT NULL,
+  `amountpaid` decimal(10,0) DEFAULT NULL,
+  `totalamount` decimal(10,0) DEFAULT NULL,
+  `status` int(5) DEFAULT NULL,
+  PRIMARY KEY (`bookingid`),
+  KEY `FK_booking2` (`tourid`),
+  KEY `FK_booking3` (`customerid`),
+  CONSTRAINT `FK_booking3` FOREIGN KEY (`customerid`) REFERENCES `customers` (`customerid`),
+  CONSTRAINT `FK_booking2` FOREIGN KEY (`tourid`) REFERENCES `tour` (`tourid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="cashpayments" view="colnames">
+<left>949</left>
+<top>4</top>
+<width>157</width>
+<height>197</height>
+<sql_create_table>CREATE TABLE `cashpayments` (
+  `receiptid` int(10) NOT NULL AUTO_INCREMENT,
+  `customerid` int(10) DEFAULT NULL,
+  `datetimeofpayment` datetime DEFAULT NULL,
+  `paidto` varchar(20) DEFAULT NULL,
+  `bookingid` int(10) DEFAULT NULL,
+  `recordaddedby` int(10) DEFAULT NULL,
+  `amount` decimal(10,0) DEFAULT NULL,
+  PRIMARY KEY (`receiptid`),
+  KEY `FK_cashpayments1` (`customerid`),
+  KEY `FK_cashpayments4` (`bookingid`),
+  KEY `FK_cashpayments3` (`recordaddedby`),
+  CONSTRAINT `FK_cashpayments3` FOREIGN KEY (`recordaddedby`) REFERENCES `admins` (`adminid`),
+  CONSTRAINT `FK_cashpayments1` FOREIGN KEY (`customerid`) REFERENCES `customers` (`customerid`),
+  CONSTRAINT `FK_cashpayments4` FOREIGN KEY (`bookingid`) REFERENCES `booking` (`bookingid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="comments" view="colnames">
+<left>350</left>
+<top>109</top>
+<width>127</width>
+<height>129</height>
+<sql_create_table>CREATE TABLE `comments` (
+  `commentid` int(10) DEFAULT NULL,
+  `reviewid` int(10) DEFAULT NULL,
+  `commentedby` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="customers" view="colnames">
+<left>184</left>
+<top>290</top>
+<width>109</width>
+<height>248</height>
+<sql_create_table>CREATE TABLE `customers` (
+  `customerid` int(10) NOT NULL AUTO_INCREMENT,
+  `name` varchar(20) DEFAULT NULL,
+  `address` varchar(20) DEFAULT NULL,
+  `city` varchar(20) DEFAULT NULL,
+  `state` varchar(20) DEFAULT NULL,
+  `country` varchar(20) DEFAULT NULL,
+  `pincode` int(10) DEFAULT NULL,
+  `phoneno` varchar(20) DEFAULT NULL,
+  `email` varchar(20) DEFAULT NULL,
+  `password` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`customerid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="departurelocation" view="colnames">
+<left>478</left>
+<top>183</top>
+<width>116</width>
+<height>136</height>
+<sql_create_table>CREATE TABLE `departurelocation` (
+  `departureid` int(10) NOT NULL AUTO_INCREMENT,
+  `sourcecity` varchar(20) DEFAULT NULL,
+  `tourid` int(10) DEFAULT NULL,
+  PRIMARY KEY (`departureid`),
+  KEY `FK_departurelocation` (`tourid`),
+  CONSTRAINT `FK_departurelocation` FOREIGN KEY (`tourid`) REFERENCES `tour` (`tourid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="gallary" view="colnames">
+<left>398</left>
+<top>5</top>
+<width>108</width>
+<height>129</height>
+<sql_create_table>CREATE TABLE `gallary` (
+  `picid` int(10) NOT NULL AUTO_INCREMENT,
+  `tourid` int(10) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  PRIMARY KEY (`picid`),
+  KEY `FK_gallary` (`tourid`),
+  CONSTRAINT `FK_gallary` FOREIGN KEY (`tourid`) REFERENCES `tour` (`tourid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="itenerary" view="colnames">
+<left>561</left>
+<top>-9</top>
+<width>108</width>
+<height>129</height>
+<sql_create_table>CREATE TABLE `itenerary` (
+  `tourid` int(10) NOT NULL,
+  `dayno` int(10) NOT NULL,
+  `title` varchar(50) DEFAULT NULL,
+  `description` varchar(2000) DEFAULT NULL,
+  PRIMARY KEY (`tourid`,`dayno`),
+  CONSTRAINT `FK_itenerary` FOREIGN KEY (`tourid`) REFERENCES `tour` (`tourid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="places" view="colnames">
+<left>969</left>
+<top>307</top>
+<width>108</width>
+<height>163</height>
+<sql_create_table>CREATE TABLE `places` (
+  `placename` varchar(20) NOT NULL,
+  `district` varchar(20) DEFAULT NULL,
+  `state` varchar(20) DEFAULT NULL,
+  `country` varchar(20) DEFAULT NULL,
+  `pincode` int(10) DEFAULT NULL,
+  PRIMARY KEY (`placename`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="queries" view="colnames">
+<left>587</left>
+<top>163</top>
+<width>140</width>
+<height>197</height>
+<sql_create_table>CREATE TABLE `queries` (
+  `queryid` int(10) DEFAULT NULL,
+  `nameofperson` varchar(20) DEFAULT NULL,
+  `email` varchar(20) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `phoneno` varchar(20) DEFAULT NULL,
+  `query` varchar(100) DEFAULT NULL,
+  `datetimeofquery` datetime DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="reviews" view="colnames">
+<left>13</left>
+<top>352</top>
+<width>146</width>
+<height>163</height>
+<sql_create_table>CREATE TABLE `reviews` (
+  `reviewid` int(10) NOT NULL AUTO_INCREMENT,
+  `tourid` int(10) DEFAULT NULL,
+  `customerid` int(10) DEFAULT NULL,
+  `reviewdescription` varchar(100) DEFAULT NULL,
+  `ratings` int(5) DEFAULT NULL,
+  PRIMARY KEY (`reviewid`),
+  KEY `FK_reviews` (`tourid`),
+  KEY `FK_reviews2` (`customerid`),
+  CONSTRAINT `FK_reviews2` FOREIGN KEY (`customerid`) REFERENCES `customers` (`customerid`),
+  CONSTRAINT `FK_reviews` FOREIGN KEY (`tourid`) REFERENCES `tour` (`tourid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="tour" view="colnames">
+<left>152</left>
+<top>27</top>
+<width>183</width>
+<height>282</height>
+<sql_create_table>CREATE TABLE `tour` (
+  `tourid` int(10) NOT NULL AUTO_INCREMENT,
+  `tourname` varchar(20) DEFAULT NULL,
+  `duration` varchar(20) DEFAULT NULL,
+  `cost` decimal(10,0) DEFAULT NULL,
+  `destination` varchar(20) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `departuredate` date DEFAULT NULL,
+  `arrivaldate` date DEFAULT NULL,
+  `noofseats` int(5) DEFAULT NULL,
+  `addedby` int(10) DEFAULT NULL,
+  `bookingamount` decimal(10,0) DEFAULT NULL,
+  `lastdatetopayfullamount` date DEFAULT NULL,
+  PRIMARY KEY (`tourid`),
+  KEY `FK_tour2` (`destination`),
+  KEY `FK_tour` (`addedby`),
+  CONSTRAINT `FK_tour` FOREIGN KEY (`addedby`) REFERENCES `admins` (`adminid`)
+) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="touristinfo" view="colnames">
+<left>626</left>
+<top>373</top>
+<width>114</width>
+<height>163</height>
+<sql_create_table>CREATE TABLE `touristinfo` (
+  `infoid` int(10) NOT NULL AUTO_INCREMENT,
+  `bookingid` int(10) DEFAULT NULL,
+  `touristname` varchar(20) DEFAULT NULL,
+  `age` int(5) DEFAULT NULL,
+  `gender` varchar(20) DEFAULT NULL,
+  PRIMARY KEY (`infoid`),
+  KEY `FK_touristinfo` (`bookingid`),
+  CONSTRAINT `FK_touristinfo` FOREIGN KEY (`bookingid`) REFERENCES `booking` (`bookingid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="transaction" view="colnames">
+<left>768</left>
+<top>205</top>
+<width>170</width>
+<height>214</height>
+<sql_create_table>CREATE TABLE `transaction` (
+  `transactionid` int(10) NOT NULL AUTO_INCREMENT,
+  `customerid` int(10) DEFAULT NULL,
+  `amountpaid` decimal(10,0) DEFAULT NULL,
+  `datetimeoftransaction` datetime DEFAULT NULL,
+  `bookingid` int(10) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `modeofpayment` varchar(20) DEFAULT NULL,
+  `grantuniqueid` int(10) DEFAULT NULL,
+  PRIMARY KEY (`transactionid`),
+  KEY `FK_transaction1` (`customerid`),
+  KEY `FK_transaction2` (`bookingid`),
+  CONSTRAINT `FK_transaction2` FOREIGN KEY (`bookingid`) REFERENCES `booking` (`bookingid`),
+  CONSTRAINT `FK_transaction1` FOREIGN KEY (`customerid`) REFERENCES `customers` (`customerid`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+<table name="transportmode" view="colnames">
+<left>742</left>
+<top>18</top>
+<width>140</width>
+<height>163</height>
+<sql_create_table>CREATE TABLE `transportmode` (
+  `modeid` int(10) NOT NULL AUTO_INCREMENT,
+  `tourid` int(10) DEFAULT NULL,
+  `source` varchar(20) DEFAULT NULL,
+  `transportmode` varchar(20) DEFAULT NULL,
+  `modedescription` varchar(100) DEFAULT NULL,
+  `priceoftransport` decimal(10,0) DEFAULT NULL,
+  PRIMARY KEY (`modeid`),
+  KEY `FK_transportmode` (`tourid`),
+  CONSTRAINT `FK_transportmode` FOREIGN KEY (`tourid`) REFERENCES `tour` (`tourid`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>
